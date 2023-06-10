@@ -43,11 +43,19 @@ main(){
 		print_stack(top);
 
     //optional work
+    //1.a. exchange top two element and print them out
     printf("\nNow the two top elements are exchange\n");
     push_string(&top,C);
     exchange_top(top);
     print_stack(top);
+    delete_stack(&top);
 
+    //1.b. reverse the link list and print it out
+    printf("\n\n");
+    push_string(&top,C);
+    reverse(&top);
+    print_stack(top);
+    delete_stack(&top);
 }
 
 //function definition below
@@ -124,5 +132,35 @@ void exchange_top(POINTER Top){
 
 //1.b. function to reverse the stack
 void reverse(POINTER *Top){
+  /*
+    we need to create another link list which is a backward link list and loop 
+    through the original list to append its element to our new list
+  */
+  POINTER new_top = NULL;
+  POINTER temp = *Top;
+
+  while(temp != NULL){
+    POINTER new = malloc(sizeof(ELEMENT));
+    new->d = NULL;
+    if(new_top == NULL){
+      new_top = new;
+      new_top->d = temp->d;
+    }
+    else{
+      new->next = new_top;
+      new_top = new;
+      new_top->d = temp->d;
+    }
+    temp = temp->next;
+  }
   
+  //free up memory of original link-list
+  temp = *Top;
+  while(temp != NULL){
+    POINTER free_temp = temp;
+    temp = temp->next;
+    free(free_temp);
+  }
+
+  *Top = new_top;
 }
